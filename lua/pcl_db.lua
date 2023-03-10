@@ -4,6 +4,10 @@ local json = require 'json'
 db = {}
 filename = 'my-cds.json'
 
+-------------------------------------------------
+-------- HELPERS --------------------------------
+-------------------------------------------------
+
 function pp(t)
   if type(t) == 'table' then
     for k, v in pairs(t) do
@@ -18,6 +22,30 @@ function pp(t)
     print(t)
   end
 end
+
+local function all(k, v, fs)
+  for _, f in pairs(fs) do
+    if f(k, v) then
+      return true
+    end
+  end
+end
+
+local function match_predicate(functions, predicates, key)
+  if predicates[key] then
+    table.insert(functions, function(k, v)
+      return k == key and v == predicates[key]
+    end)
+  end
+end
+
+local function y_or_n_p(input)
+  return string.lower(input) == 'y'
+end
+
+-------------------------------------------------
+-------- DOMAIN ---------------------------------
+-------------------------------------------------
 
 local function make_cd(title, artist, rating, ripped)
   return {
@@ -36,10 +64,6 @@ end
 local function prompt_read(prompt)
   io.write(prompt .. ': ')
   return io.read()
-end
-
-local function y_or_n_p(input)
-  return string.lower(input) == 'y'
 end
 
 local function prompt_for_cd()
@@ -61,6 +85,10 @@ function add_cds()
 
   return db
 end
+
+-------------------------------------------------
+-------- DATABASE -------------------------------
+-------------------------------------------------
 
 function save_db()
   local file = io.open(filename, 'w')
@@ -104,22 +132,6 @@ function select(selector)
   pp(res)
 end
 
-local function all(k, v, fs)
-  for _, f in pairs(fs) do
-    if f(k, v) then
-      return true
-    end
-  end
-end
-
-local function match_predicate(functions, predicates, key)
-  if predicates[key] then
-    table.insert(functions, function(k, v)
-      return k == key and v == predicates[key]
-    end)
-  end
-end
-
 function where(predicates)
   local fns = {}
 
@@ -143,6 +155,10 @@ function update(selector, key, value)
     end
   end
 end
+
+-------------------------------------------------
+-------- PROGRAM --------------------------------
+-------------------------------------------------
 
 load_db()
 

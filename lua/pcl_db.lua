@@ -23,20 +23,14 @@ function pp(t)
   end
 end
 
-local function all(k, v, fs)
+local function any(k, v, fs)
   for _, f in pairs(fs) do
     if f(k, v) then
       return true
     end
   end
-end
 
-local function match_predicate(functions, predicates, key)
-  if predicates[key] then
-    table.insert(functions, function(k, v)
-      return k == key and v == predicates[key]
-    end)
-  end
+  return false
 end
 
 local function y_or_n_p(input)
@@ -132,6 +126,14 @@ function select(selector)
   pp(res)
 end
 
+local function match_predicate(functions, predicates, key)
+  if predicates[key] then
+    table.insert(functions, function(k, v)
+      return k == key and v == predicates[key]
+    end)
+  end
+end
+
 function where(predicates)
   local fns = {}
 
@@ -141,7 +143,7 @@ function where(predicates)
   match_predicate(fns, predicates, 'ripped')
 
   return function(k, v)
-    return all(k, v, fns)
+    return any(k, v, fns)
   end
 end
 

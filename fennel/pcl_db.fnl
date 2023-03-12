@@ -90,5 +90,43 @@
   (match-predicate fns predicates :ripped)
   (fn [k v] (any k v fns)))
 
+(fn update [selector key value]
+  (var res {})
+  (each [i t (pairs db)]
+    (each [k v (pairs t)]
+      (when ((where selector) k v)
+        (let [inner (. db i)]
+          (tset inner key value)
+          (set res inner)))))
+  res)
+
+;------------------------------------------------
+;-------- PROGRAM -------------------------------
+;------------------------------------------------
+
 (load-db)
-(pp (select (where {:artist "Stevie Wonder"})))
+
+(if (= #db 0)
+  (do 
+    (print"Adding dummy data...")
+    (add-record (make-cd "Songs in the Key of Life" "Stevie Wonder" 10 false))
+    (add-record (make-cd "What's Going On" "Marvin Gaye" 10 false))
+    (add-record (make-cd "I Never Loved a Man the Way I Love You" "Aretha Franklin" 10 false))
+    (add-record (make-cd "Are You Experienced" "Jimi Hendrix" 10 false))
+    (add-record (make-cd "Kind of Blue" "Miles Davis" 10 false))
+    (add-record (make-cd "There's a Riot Goin' On" "Sly and the Family Stone" 10 false))
+    (add-record (make-cd "Superfly" "Curtis Mayfield" 10 false))
+    (add-record (make-cd "Exodus" "Bob Marley and the Wailers" 10 false))
+    (add-record (make-cd "Star Time" "James Brown" 10 false))
+  (save-db))
+  (do
+    (io.write "\nLoading...")
+    (load-db)
+    (print " done.")))
+
+(print "\n========== CDS ==========")
+
+(while true
+  (io.write "\n> ")
+  (local input (io.read))
+  (pp (loadstring input)))

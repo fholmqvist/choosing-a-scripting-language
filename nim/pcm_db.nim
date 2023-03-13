@@ -1,15 +1,15 @@
 import std/json, std/marshal, std/rdstdin, std/tables, strutils
 
-type
-    CD = object
-        artist: string
-        title: string
-        rating: int
-        ripped: bool
+type CD = object
+    artist: string
+    title: string
+    rating: int
+    ripped: bool
 
-type
-    DB = object
-        cds: seq[CD]
+type DB = object
+    cds: seq[CD]
+
+type Selector = proc(k: string, v: string): bool
 
 const filename = "my-cds.json"
 
@@ -62,7 +62,7 @@ proc print(db: DB) =
     for cd in db.cds:
         echo cd
 
-proc select(selector: proc(k: string, v: string): bool): seq[CD] =
+proc select(selector: Selector): seq[CD] =
     var res: seq[CD] = @[]
     for cd in db.cds:
         for k, v in cd.fieldPairs:
@@ -71,26 +71,29 @@ proc select(selector: proc(k: string, v: string): bool): seq[CD] =
                     res.insert(cd)
     res
 
-proc match_predicate(functions: var seq[proc(k: string, v: string): bool], 
+proc match_predicate(functions: var seq[Selector], 
     predicates: Table[string, string], key: string) =
     if predicates.hasKey(key):
         functions.insert(proc(k: string, v: string): bool =
             k == key and v == predicates[key])
 
 proc where(predicates: Table[string, string]): 
-    proc(k: string, v: string): bool =
-    var fns: seq[proc(k: string, v: string): bool] = @[]
+    Selector =
+    var fns: seq[Selector] = @[]
 
     match_predicate(fns, predicates, "title")
     match_predicate(fns, predicates, "artist")
     match_predicate(fns, predicates, "rating")
     match_predicate(fns, predicates, "ripped")
 
-    proc(k: string, v: string): bool =
+    return proc(k: string, v: string): bool =
         for f in fns:
             if f(k,v):
                 return true
         false
+
+# Won't be able to (elegantly) write update
+# as tables are typed to single K, V types.
 
 #------------------------------------------------
 #------- PROGRAM --------------------------------

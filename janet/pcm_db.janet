@@ -1,6 +1,6 @@
 (import spork/json)
 
-(db @[])
+(var db @[])
 (def filename "my-cds.json")
 
 #------------------------------------------------

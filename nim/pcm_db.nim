@@ -1,4 +1,4 @@
-import std/json, std/marshal, strutils
+import std/json, std/marshal, std/rdstdin, std/tables, strutils
 
 type
     CD = object
@@ -26,24 +26,76 @@ proc y_or_n_p(input: string): bool =
 #------- DOMAIN ---------------------------------
 #------------------------------------------------
 
+proc make_cd(title: string, artist: string, rating: int, ripped: bool): CD =
+    CD(title: title, artist: artist, rating: rating, ripped: ripped)
+
+proc add_record(cd: CD) =
+    db.cds.insert(cd)
+
+proc prompt_read(prompt: string): string =
+    readLineFromStdin(@[prompt, ": "].join())
+    
+proc prompt_for_cd(): CD =
+    make_cd(prompt_read("Title"), 
+        prompt_read("Artist"),
+        parseInt(prompt_read("Rating")),
+        y_or_n_p(prompt_read("Ripped [y/n]")))
+
+proc add_cds(): DB =
+    while true:
+        add_record(prompt_for_cd())
+        if not y_or_n_p(prompt_read("Another? [y/n]")):
+            break
+    db
+    
 #------------------------------------------------
 #------- DATABASE -------------------------------
 #------------------------------------------------
 
-proc loadDB() =
-    db.cds = to(parseJson readFile filename, seq[CD])
-
-proc saveDB() =
+proc save_db() =
     writeFile(filename, $$db.cds)
+
+proc load_db() =
+    db.cds = to(parseJson readFile filename, seq[CD])
 
 proc print(db: DB) =
     for cd in db.cds:
         echo cd
 
+proc select(selector: proc(k: string, v: string): bool): seq[CD] =
+    var res: seq[CD] = @[]
+    for cd in db.cds:
+        for k, v in cd.fieldPairs:
+            when v is string:
+                if selector(k, v):
+                    res.insert(cd)
+    res
+
+proc match_predicate(functions: var seq[proc(k: string, v: string): bool], 
+    predicates: Table[string, string], key: string) =
+    if predicates.hasKey(key):
+        functions.insert(proc(k: string, v: string): bool =
+            k == key and v == predicates[key])
+
+proc where(predicates: Table[string, string]): 
+    proc(k: string, v: string): bool =
+    var fns: seq[proc(k: string, v: string): bool] = @[]
+
+    match_predicate(fns, predicates, "title")
+    match_predicate(fns, predicates, "artist")
+    match_predicate(fns, predicates, "rating")
+    match_predicate(fns, predicates, "ripped")
+
+    proc(k: string, v: string): bool =
+        for f in fns:
+            if f(k,v):
+                return true
+        false
+
 #------------------------------------------------
 #------- PROGRAM --------------------------------
 #------------------------------------------------
 
-loadDB()
+load_db()
 
-db.print
+echo select(where({"artist": "Stevie Wonder"}.toTable))

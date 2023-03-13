@@ -41,8 +41,8 @@
 (fn prompt-for-cd []
   (make-cd (prompt-read "Title")
            (prompt-read "Artist")
-           (prompt-read "Rating")
-           (prompt-read "Ripped [y/n]")))
+           (tonumber (prompt-read "Rating"))
+           (y-or-n-p (prompt-read "Ripped [y/n]"))))
 
 (fn add-cds []
   (var done? false)
@@ -108,7 +108,7 @@
 
 (if (= #db 0)
   (do 
-    (print"Adding dummy data...")
+    (print "Adding dummy data...")
     (add-record (make-cd "Songs in the Key of Life" "Stevie Wonder" 10 false))
     (add-record (make-cd "What's Going On" "Marvin Gaye" 10 false))
     (add-record (make-cd "I Never Loved a Man the Way I Love You" "Aretha Franklin" 10 false))
@@ -129,4 +129,4 @@
 (while true
   (io.write "\n> ")
   (local input (io.read))
-  (pp (loadstring input)))
+  (pp (fennel.eval input)))

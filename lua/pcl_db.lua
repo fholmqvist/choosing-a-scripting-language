@@ -1,5 +1,5 @@
 ---@diagnostic disable: deprecated, lowercase-global
-local json = require 'json'
+local json = require 'cjson'
 
 db = {}
 filename = 'my-cds.json'

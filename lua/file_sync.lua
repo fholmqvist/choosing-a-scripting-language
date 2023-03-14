@@ -1,6 +1,6 @@
 ---@diagnostic disable: lowercase-global
 local lfs = require 'lfs'
-local json = require 'json'
+local json = require 'cjson'
 local http_request = require 'http.request'
 
 local path = './files'

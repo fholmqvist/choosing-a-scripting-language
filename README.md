@@ -14,6 +14,7 @@ Let's write some problems in the ones that look interesting and compare notes.
 | Janet    | PCL DB         | Done                    |
 | Janet    | FileSync       | Done                    |
 | Nim      | PCL DB         | Blocked on typed tables |
+| Go       | FileSync       | Done                    |
 
 ```
 PCL DB = Practical Common Lisp Chapter 3: Practical: A Simple Database.

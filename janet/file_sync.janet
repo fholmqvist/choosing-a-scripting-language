@@ -18,7 +18,6 @@
 #------- DOMAIN ---------------------------------
 #------------------------------------------------
 
-# TODO: Not recursing into nested folders.
 (defn load-files (path)
   (loop [dir :in (os/dir path)]
     (def full-path (string/join @[path "/" dir "/"] ""))

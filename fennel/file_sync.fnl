@@ -4,7 +4,7 @@
 ;; Bug in Fennel 1.3.0: Dynamic loading of C deps.
 
 (local files-path "./files")
-(local files {})
+(var files {})
 
 ;------------------------------------------------
 ;-------- HELPERS -------------------------------
@@ -19,6 +19,8 @@
 (fn lfs-dir [path]
   {:.         :ignore 
    :..        :ignore 
+   "a"        :ignore
+   "b"        :ignore
    "a_01.zip" :ignore
    "a_02.zip" :ignore
    "b_01.zip" :ignore})
@@ -43,6 +45,21 @@
           (load-files nil))
           
         (local (name count) (string.gsub file ".zip" ""))
-        (print file name count)))))
+        (when (= count 1)
+          (local idx (string.find name "_"))
+          
+          (when (not (= idx nil))
+            (local key (string.sub name 0 (- idx 1)))
+            (local dir-name (string.sub path (+ (string.find path "/[^/]*$") 1)))
+            
+            ;; Skipping dir-name comparison as it makes no
+            ;; sense without real directories.
+            (when (and (not (= key nil))) ;(= key dir-name))
+              (when (= (. files key) nil)
+                (tset files key {}))
+              (table.insert (. files key) file))))))))
 
-(load-files files-path)
+;; Can't load http.request. Abandoning for now.
+
+(load-files "a/")
+(pp files)

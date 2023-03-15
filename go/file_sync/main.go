@@ -9,9 +9,9 @@ import (
 	"strings"
 )
 
-type FolderWithFiles map[string][]string
+type FoldersWithFiles map[string][]string
 
-func (f FolderWithFiles) Keys() []string {
+func (f FoldersWithFiles) Keys() []string {
 	keys := make([]string, 0, len(f))
 	for k := range f {
 		keys = append(keys, k)
@@ -26,7 +26,7 @@ func main() {
 		panic(err)
 	}
 	defer r.Body.Close()
-	var serverFiles FolderWithFiles
+	var serverFiles FoldersWithFiles
 	json.NewDecoder(r.Body).Decode(&serverFiles)
 	newFiles := findNewFiles(files, serverFiles)
 	keys := newFiles.Keys()
@@ -35,8 +35,8 @@ func main() {
 	}
 }
 
-func loadFiles() FolderWithFiles {
-	files := FolderWithFiles{}
+func loadFiles() FoldersWithFiles {
+	files := FoldersWithFiles{}
 	filepath.Walk("./files", func(path string, info fs.FileInfo, err error) error {
 		if err != nil || info.IsDir() {
 			return nil
@@ -56,8 +56,8 @@ func loadFiles() FolderWithFiles {
 	return files
 }
 
-func findNewFiles(localFiles, serverFiles FolderWithFiles) FolderWithFiles {
-	newFiles := FolderWithFiles{}
+func findNewFiles(localFiles, serverFiles FoldersWithFiles) FoldersWithFiles {
+	newFiles := FoldersWithFiles{}
 	for folder, files := range localFiles {
 		if _, ok := serverFiles[folder]; !ok {
 			newFiles[folder] = files

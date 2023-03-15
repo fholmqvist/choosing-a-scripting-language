@@ -3,7 +3,7 @@ local lfs = require 'lfs'
 local json = require 'cjson'
 local http_request = require 'http.request'
 
-local path = './files'
+local files_path = './files'
 
 local files = {}
 
@@ -61,29 +61,45 @@ local function load_files(path)
   end
 end
 
-load_files(path)
+local function find_new_files(local_files, server_files)
+  local new_files = {}
 
--- TODO: Find old server / write dummy server.
--- local headers, stream = assert(http_request.new_from_uri('https://lua.org/'):go())
+  for folder_name, folder in pairs(local_files) do
+    if server_files[folder_name] == nil then
+      new_files[folder_name] = folder
+    else
+      for _, file in pairs(folder) do
+        local found = false
+        for _, server_file in pairs(server_files[folder_name]) do
+          if server_file == file then found = true end
+        end
 
--- assert(headers:get(':status') == '200')
-
--- local body = assert(stream:get_body_as_string())
--- local server_files = assert(json.decode(body))
-
-local server_files = { a = { "a_01.zip", }, b = { "b_01.zip" }, c = {} }
-
-local new_files = {}
-for folder_name, folder in pairs(files) do
-  for file_name, file in pairs(folder) do
-    if server_files[folder_name][file_name] == nil then
-      if new_files[folder_name] == nil then
-        new_files[folder_name] = folder
+        if not found then
+          if not new_files[folder_name] then
+            new_files[folder_name] = {}
+          end
+          table.insert(new_files[folder_name], file)
+        end
       end
-
-      new_files[folder_name][file_name] = file
     end
   end
+
+  return new_files
 end
+
+------------------------------------------------
+-------- PROGRAM -------------------------------
+------------------------------------------------
+
+load_files(files_path)
+
+local headers, stream = assert(http_request.new_from_uri('http://localhost:8080'):go())
+
+assert(headers:get(':status') == '200')
+
+local body = assert(stream:get_body_as_string())
+local server_files = assert(json.decode(body))
+
+local new_files = find_new_files(files, server_files)
 
 assert(#get_keys(new_files) == 1)

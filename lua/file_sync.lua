@@ -43,9 +43,6 @@ local function load_files(path)
     if file ~= '.' and file ~= '..' then
       local relative_path = path .. '/' .. file
 
-      if lfs.attributes(relative_path)['mode'] == 'directory' then
-        load_files(relative_path)
-      else
         local name, count = file:gsub('.zip', '')
 
         if count == 1 then
@@ -61,7 +58,6 @@ local function load_files(path)
               end
 
               table.insert(files[key], file)
-            end
           end
         end
       end

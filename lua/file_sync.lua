@@ -37,23 +37,23 @@ local function load_files(path)
 
       if lfs.attributes(relative_path)['mode'] == 'directory' then
         load_files(relative_path)
-      end
+      else
+        local name, count = file:gsub('.zip', '')
 
-      local name, count = file:gsub('.zip', '')
+        if count == 1 then
+          local idx = name:find('_')
 
-      if count == 1 then
-        local idx = name:find('_')
+          if idx ~= nil then
+            local key = name:sub(0, idx - 1)
+            local dir_name = path:sub(path:find("/[^/]*$") + 1)
 
-        if idx ~= nil then
-          local key = name:sub(0, idx - 1)
-          local dir_name = path:sub(path:find("/[^/]*$") + 1)
+            if key ~= nil and key == dir_name then
+              if files[key] == nil then
+                files[key] = {}
+              end
 
-          if key ~= nil and key == dir_name then
-            if files[key] == nil then
-              files[key] = {}
+              table.insert(files[key], file)
             end
-
-            table.insert(files[key], file)
           end
         end
       end

@@ -8,8 +8,9 @@ Let's write some problems in the ones that look interesting and compare notes.
 | Language | Implementation | Status                  |
 | -------- | -------------- | ----------------------- |
 | Lua      | PCL DB         | Done                    |
-| Lua      | FileSync       | WIP: Server calls       |
+| Lua      | FileSync       | Done                    |
 | Fennel   | PCL DB         | Done                    |
+| Fennel   | FileSync       | Blocked on 1.3.0 bug    |
 | Janet    | PCL DB         | Done                    |
 | Nim      | PCL DB         | Blocked on typed tables |
 

@@ -12,6 +12,7 @@ Let's write some problems in the ones that look interesting and compare notes.
 | Fennel   | PCL DB         | Done                    |
 | Fennel   | FileSync       | Blocked on 1.3.0 bug    |
 | Janet    | PCL DB         | Done                    |
+| Janet    | FileSync       | Done                    |
 | Nim      | PCL DB         | Blocked on typed tables |
 
 ```

@@ -7,6 +7,10 @@ local files_path = './files'
 
 local files = {}
 
+-------------------------------------------------
+-------- HELPERS --------------------------------
+-------------------------------------------------
+
 function pp(t)
   if type(t) == 'table' then
     for k, v in pairs(t) do
@@ -29,6 +33,10 @@ local function get_keys(t)
   end
   return keys
 end
+
+-------------------------------------------------
+-------- DOMAIN ---------------------------------
+-------------------------------------------------
 
 local function load_files(path)
   for file in lfs.dir(path) do

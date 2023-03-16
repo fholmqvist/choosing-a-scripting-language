@@ -1,7 +1,11 @@
 .vscode
+/server
+
+*/json.lua
+
 */my-cds.json
-/nim/pcm_db
 */files/*
 */*/files/*
-*/json.lua
-/server
+
+/nim/pcm_db
+/nim/file_sync

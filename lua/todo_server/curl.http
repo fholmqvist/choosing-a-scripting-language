@@ -1,0 +1,4 @@
+curl \
+  -H "Content-type: application/json" \
+  -d '{"user_id": 1, "title": "testing", "description": ""}' \
+  'http://localhost:8080/create'

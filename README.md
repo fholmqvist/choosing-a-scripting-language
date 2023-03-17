@@ -8,17 +8,20 @@ Let's write some problems in the ones that look interesting and compare notes.
 | Language | Implementation | Status                  |
 | -------- | -------------- | ----------------------- |
 | Lua      | PCL DB         | Done                    |
-| Lua      | FileSync       | Done                    |
+| Lua      | File Sync      | Done                    |
+| Lua      | Todo Seeder    | Done                    |
 | Fennel   | PCL DB         | Done                    |
-| Fennel   | FileSync       | Blocked on 1.3.0 bug    |
+| Fennel   | File Sync      | Blocked on 1.3.0 bug    |
 | Janet    | PCL DB         | Done                    |
-| Janet    | FileSync       | Done                    |
+| Janet    | File Sync      | Done                    |
 | Nim      | PCL DB         | Blocked on typed tables |
-| Nim      | FileSync       | Done                    |
-| Go       | FileSync       | Done                    |
+| Nim      | File Sync      | Done                    |
+| Go       | File Sync      | Done                    |
 
 ```
 PCL DB = Practical Common Lisp Chapter 3: Practical: A Simple Database.
 
-FileSync = Reads files in folders, compares them against files on a server, sends the diff.
+File Sync = Reads files in folders, compares them against files on a server, sends the diff.
+
+Todo Seeder = Seeds a PSQL database with users and todos.
 ```

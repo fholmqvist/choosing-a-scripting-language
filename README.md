@@ -10,6 +10,7 @@ Let's write some problems in the ones that look interesting and compare notes.
 | Lua      | PCL DB         | Done                    |
 | Lua      | File Sync      | Done                    |
 | Lua      | Todo Seeder    | Done                    |
+| Lua      | Todo Server    | Done                    |
 | Fennel   | PCL DB         | Done                    |
 | Fennel   | File Sync      | Blocked on 1.3.0 bug    |
 | Janet    | PCL DB         | Done                    |

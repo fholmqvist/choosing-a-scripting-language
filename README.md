@@ -21,7 +21,7 @@ Let's write some problems in the ones that look interesting and compare notes.
 ```
 PCL DB = Practical Common Lisp Chapter 3: Practical: A Simple Database.
 
-File Sync = Reads files in folders, compares them against files on a server, sends the diff.
+File Sync = Reads files in folders, compares them against files on a server, displays the diff.
 
 Todo Seeder = Seeds a PSQL database with users and todos.
 ```

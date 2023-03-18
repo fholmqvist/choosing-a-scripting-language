@@ -63,7 +63,7 @@ proc insert_quadratic() =
     
     let end_time = now()
 
-    echo fmt"Took: {start_time-end_time}."
+    echo fmt"Took: {end_time-start_time}."
 
 proc insert_linear() =
     echo "Inserting quadratically.\n"
@@ -98,6 +98,6 @@ proc insert_linear() =
     
     let end_time = now()
 
-    echo fmt"Took: {$(start_time-end_time)}."
+    echo fmt"Took: {end_time-start_time}."
 
 insert_linear()

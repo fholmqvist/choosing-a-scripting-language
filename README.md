@@ -17,6 +17,7 @@ Let's write some problems in the ones that look interesting and compare notes.
 | Janet    | File Sync      | Done                    |
 | Nim      | PCL DB         | Blocked on typed tables |
 | Nim      | File Sync      | Done                    |
+| Nim      | Todo Seeder    | Done                    |
 | Go       | File Sync      | Done                    |
 
 ```

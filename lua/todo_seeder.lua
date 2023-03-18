@@ -98,7 +98,7 @@ local function insert_linear()
       name, email, password))
 
     local query = 'insert into todos (user_id, title, description, done) values '
-    
+
     for _ = 1, 100 do
       local title = gen_title()
       local description = gen_description()

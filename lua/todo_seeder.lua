@@ -47,10 +47,10 @@ assert(db:connect())
 print('Starting.\n')
 
 print('Truncating todos.')
-assert(db:query('truncate todos'))
+assert(db:query('truncate todos restart identity'))
 
 print('Truncating users.')
-assert(db:query('truncate users cascade'))
+assert(db:query('truncate users restart identity cascade'))
 
 local function insert_quadratic()
   print('Inserting quadratically.\n')

@@ -2,16 +2,17 @@
 (import spork/http)
 
 (var files @{})
-(def path "./files")
+(def path "../testing")
 
 #------------------------------------------------
 #------- HELPERS --------------------------------
 #------------------------------------------------
 
-(defn get-keys [t]
+(defn get-all-files [t]
   (var keys @[])
-  (loop [[k _] :pairs t]
-    (array/push keys k))
+  (loop [[_ folder] :pairs t]
+    (loop [[_ file] :pairs folder]
+      (array/push keys file)))
   keys)
 
 #------------------------------------------------
@@ -21,16 +22,21 @@
 (defn load-files (path)
   (loop [dir :in (os/dir path)]
     (def full-path (string/join @[path "/" dir "/"] ""))
-    
-    (loop [file :in (os/dir full-path)]
-      (def name (string/replace ".zip" "" file))
-      (def count (string/find "_" file))
-      
-      (when (and (not (nil? count)) 
-                 (> count 0))
-        (when (not (files dir))
-          (set (files dir) @[]))
-        (array/push (files dir) file)))))
+
+    (when-let [stat (os/stat full-path)
+               mode (stat :mode)
+               _    (= mode :directory)]
+      (loop [file :in (os/dir full-path)]
+        (def name (string/replace ".zip" "" file))
+        (def count (string/find "_" file))
+
+        (when (and (not (nil? count)) 
+                   (> count 0))
+          
+          (when (not (files dir))
+            (set (files dir) @[]))
+          
+          (array/push (files dir) file))))))
 
 (defn find-new-files [local-files server-files]
   (var new-files @{})
@@ -42,14 +48,15 @@
     (loop [[_ file] :pairs folder]
       (var found false)
       
-      (loop [[_ server-file] :pairs (server-files folder-name)]
-        (when (= server-file file)
-          (set found true)))
-      
-      (when (not found)
-        (when (not (new-files folder-name))
-          (set (new-files folder-name) @[]))
-        (array/push (new-files folder-name) file))))
+      (when-let [server-folder (server-files folder-name)]
+        (loop [[_ server-file] :pairs server-folder]
+          (when (= server-file file)
+            (set found true)))
+        
+        (when (not found)
+          (when (not (new-files folder-name))
+            (set (new-files folder-name) @[]))
+          (array/push (new-files folder-name) file)))))
   
   new-files)
 
@@ -67,4 +74,4 @@
 
 (def new-files (find-new-files files server-files))
 
-(assert (= 1 (length (get-keys new-files))))
+(assert (= 3507 (length (get-all-files new-files))))

@@ -10,6 +10,8 @@
 
 /nim/pcm_db
 /nim/file_sync
+/nim/todo_seeder
+/nim/todo_server
 
 **/nginx.conf.compiled
 **/client_body_temp

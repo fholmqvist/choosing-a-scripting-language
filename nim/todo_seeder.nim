@@ -19,10 +19,10 @@ proc gen_password(): string =
     return computeSHA256(random_word()).toHex
 
 proc gen_title(): string =
-    return fmt"{random_word()}{random_word()}"
+    return fmt"{random_word()} {random_word()}"
 
 proc gen_description(): string =
-    return fmt"{random_word()}{random_word()}{random_word()}"
+    return fmt"{random_word()} {random_word()} {random_word()}"
 
 let db = open("localhost", "postgres", "postgres", "todo")
 

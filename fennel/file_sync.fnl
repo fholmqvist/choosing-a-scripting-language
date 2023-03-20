@@ -24,6 +24,10 @@
    "a_01.zip" :ignore
    "a_02.zip" :ignore
    "b_01.zip" :ignore})
+
+(fn is-directory [path]
+  (= "a" "b" path))
+   
 ;------------------------------------------------
 ;-------- DOMAIN ---- ---------------------------
 ;------------------------------------------------
@@ -40,6 +44,9 @@
       (when (and (not (= "."  file)) 
                  (not (= ".." file)))
         (local relative-path (.. path "/" file))
+
+        (when (is-directory relative-path)
+          (load-files nil))
           
         (local (name count) (string.gsub file ".zip" ""))
         (when (= count 1)

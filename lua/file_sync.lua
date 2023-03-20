@@ -43,21 +43,25 @@ local function load_files(path)
     if file ~= '.' and file ~= '..' then
       local relative_path = path .. '/' .. file
 
-        local name, count = file:gsub('.zip', '')
+      if lfs.attributes(relative_path)['mode'] == 'directory' then
+        load_files(relative_path)
+      end
 
-        if count == 1 then
-          local idx = name:find('_')
+      local name, count = file:gsub('.zip', '')
 
-          if idx ~= nil then
-            local key = name:sub(0, idx - 1)
-            local dir_name = path:sub(path:find("/[^/]*$") + 1)
+      if count == 1 then
+        local idx = name:find('_')
 
-            if key ~= nil and key == dir_name then
-              if files[key] == nil then
-                files[key] = {}
-              end
+        if idx ~= nil then
+          local key = name:sub(0, idx - 1)
+          local dir_name = path:sub(path:find("/[^/]*$") + 1)
 
-              table.insert(files[key], file)
+          if key ~= nil and key == dir_name then
+            if files[key] == nil then
+              files[key] = {}
+            end
+
+            table.insert(files[key], file)
           end
         end
       end

@@ -3,7 +3,7 @@ local lfs = require 'lfs'
 local json = require 'cjson'
 local http_request = require 'http.request'
 
-local files_path = './files'
+local files_path = '../testing/'
 
 local files = {}
 
@@ -26,12 +26,14 @@ function pp(t)
   end
 end
 
-local function get_keys(t)
-  local keys = {}
-  for key, _ in pairs(t) do
-    table.insert(keys, key)
+local function get_all_files(t)
+  local res = {}
+  for _, folder in pairs(t) do
+    for _, file in ipairs(folder) do
+      table.insert(res, file)
+    end
   end
-  return keys
+  return res
 end
 
 -------------------------------------------------
@@ -110,4 +112,4 @@ local server_files = assert(json.decode(body))
 
 local new_files = find_new_files(files, server_files)
 
-assert(#get_keys(new_files) == 1)
+assert(#get_all_files(new_files) == 3507)

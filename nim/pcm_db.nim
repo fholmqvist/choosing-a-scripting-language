@@ -34,9 +34,9 @@ proc add_record(cd: CD) =
 
 proc prompt_read(prompt: string): string =
     readLineFromStdin(@[prompt, ": "].join())
-    
+
 proc prompt_for_cd(): CD =
-    make_cd(prompt_read("Title"), 
+    make_cd(prompt_read("Title"),
         prompt_read("Artist"),
         parseInt(prompt_read("Rating")),
         y_or_n_p(prompt_read("Ripped [y/n]")))
@@ -47,7 +47,7 @@ proc add_cds(): DB =
         if not y_or_n_p(prompt_read("Another? [y/n]")):
             break
     db
-    
+
 #------------------------------------------------
 #------- DATABASE -------------------------------
 #------------------------------------------------
@@ -71,13 +71,13 @@ proc select(selector: Selector): seq[CD] =
                     res.insert(cd)
     res
 
-proc match_predicate(functions: var seq[Selector], 
+proc match_predicate(functions: var seq[Selector],
     predicates: Table[string, string], key: string) =
     if predicates.hasKey(key):
         functions.insert(proc(k: string, v: string): bool =
             k == key and v == predicates[key])
 
-proc where(predicates: Table[string, string]): 
+proc where(predicates: Table[string, string]):
     Selector =
     var fns: seq[Selector] = @[]
 
@@ -88,7 +88,7 @@ proc where(predicates: Table[string, string]):
 
     return proc(k: string, v: string): bool =
         for f in fns:
-            if f(k,v):
+            if f(k, v):
                 return true
         false
 

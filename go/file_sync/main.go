@@ -12,15 +12,15 @@ import (
 type FoldersWithFiles map[string][]string
 
 func (f FoldersWithFiles) Keys() []string {
-	keys := make([]string, 0, len(f))
-	for k := range f {
-		keys = append(keys, k)
+	files := make([]string, 0, len(f))
+	for _, folder := range f {
+		files = append(files, folder...)
 	}
-	return keys
+	return files
 }
 
 func main() {
-	files := loadFiles()
+	files := loadFiles("../../testing/")
 	r, err := http.Get("http://localhost:8080")
 	if err != nil {
 		panic(err)
@@ -30,14 +30,15 @@ func main() {
 	json.NewDecoder(r.Body).Decode(&serverFiles)
 	newFiles := findNewFiles(files, serverFiles)
 	keys := newFiles.Keys()
-	if len(keys) != 1 {
-		panic(fmt.Sprintf("expected 1, got %v", len(keys)))
+	expected := 3507
+	if len(keys) != expected {
+		panic(fmt.Sprintf("expected %v, got %v", expected, len(keys)))
 	}
 }
 
-func loadFiles() FoldersWithFiles {
+func loadFiles(path string) FoldersWithFiles {
 	files := FoldersWithFiles{}
-	filepath.Walk("./files", func(path string, info fs.FileInfo, err error) error {
+	filepath.Walk(path, func(path string, info fs.FileInfo, err error) error {
 		if err != nil || info.IsDir() {
 			return nil
 		}

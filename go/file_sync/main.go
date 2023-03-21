@@ -38,9 +38,9 @@ func main() {
 
 func loadFiles(path string) FoldersWithFiles {
 	files := FoldersWithFiles{}
-	filepath.Walk(path, func(path string, info fs.FileInfo, err error) error {
+	if err := filepath.Walk(path, func(path string, info fs.FileInfo, err error) error {
 		if err != nil || info.IsDir() {
-			return nil
+			return err
 		}
 		parts := strings.Split(path, "/")
 		folder := parts[len(parts)-2]
@@ -53,7 +53,9 @@ func loadFiles(path string) FoldersWithFiles {
 		}
 		files[folder] = append(files[folder], name)
 		return nil
-	})
+	}); err != nil {
+		panic(err)
+	}
 	return files
 }
 

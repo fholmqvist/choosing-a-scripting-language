@@ -10,9 +10,9 @@
 
 (defn get-all-files [t]
   (var keys @[])
-  (loop [[_ folder] :pairs t]
-    (loop [[_ file] :pairs folder]
-      (array/push keys file)))
+  (loop [[_ folder] :pairs t
+         [_ file] :pairs folder]
+      (array/push keys file))
   keys)
 
 #------------------------------------------------
@@ -26,17 +26,16 @@
     (when-let [stat (os/stat full-path)
                mode (stat :mode)
                _    (= mode :directory)]
-      (loop [file :in (os/dir full-path)]
-        (def name (string/replace ".zip" "" file))
-        (def count (string/find "_" file))
+      (loop [file :in (os/dir full-path)
+             :let [name (string/replace ".zip" "" file)
+                   count (string/find "_" file)]
+             :when (and (not (nil? count))
+                             (> count 0))]
 
-        (when (and (not (nil? count)) 
-                   (> count 0))
-          
           (when (not (files dir))
             (set (files dir) @[]))
-          
-          (array/push (files dir) file))))))
+
+          (array/push (files dir) file)))))
 
 (defn find-new-files [local-files server-files]
   (var new-files @{})

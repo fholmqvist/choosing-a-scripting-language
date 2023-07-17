@@ -1,6 +1,6 @@
 # Choosing a scripting language
 
-I've never had a scripting language for short, one-off projects. Time to change that.  
+I've never had a scripting language for short, one-off projects. Time to change that.
 Only problem is, there's so many options, which one do you pick?
 
 Let's write some problems in the ones that look interesting and compare notes.
@@ -19,6 +19,7 @@ Let's write some problems in the ones that look interesting and compare notes.
 | Nim      | File Sync      | Done                    |
 | Nim      | Todo Seeder    | Done                    |
 | Go       | File Sync      | Done                    |
+| Crystal  | File Sync      | Done                    |
 
 ```
 PCL DB = Practical Common Lisp Chapter 3: Practical: A Simple Database.

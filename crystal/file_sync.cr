@@ -56,10 +56,7 @@ local_files = load_files("../testing")
 res = HTTP::Client.get("http://localhost:8080")
 raise "Request failed with #{res.status_code}" unless res.status_code == 200
 
-json = JSON.parse(res.body)
-
-# Error: expected argument #1 to 'JSON::Lexer.new' to be IO or String, not JSON::Any
-files_from_server = Hash(String, Array(String)).from_json(json)
+files_from_server = Hash(String, Array(String)).from_json(res.body)
 
 new_files = find_new_files(local_files, files_from_server)
-puts new_files.size
+raise "Expected 3507, got #{new_files.size}" unless new_files.size == 3507
